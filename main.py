@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 """
 
@@ -30,3 +30,12 @@ GENERATE:
 3) Return sequence
 
 """
+
+def generate_sequence():
+	pass
+
+def main():
+	pass
+
+#Now call main function
+main()
