@@ -5,9 +5,10 @@ import sqlite3
 DBFILE = 'data.db'
 
 def init_db():
+    """init database"""
     conn = sqlite3.connect(DBFILE)
-    c = conn.cursor()
-    c.execute("""
+    cursor = conn.cursor()
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS pairs (
             id INTEGER PRIMARY KEY
             begin INTEGER,
@@ -48,7 +49,7 @@ def init_db():
 #     c.execute("UPDATE users SET request_step = ?, username = ?, request_string = ? WHERE user_id = ?;", (userdata.request_step, userdata.username, userdata.request_string, user_id))
 #     conn.commit()
 #     conn.close()
-    
+
 # def get_answer(user_id):
 #     conn = sqlite3.connect(DBFILE)
 #     c = conn.cursor()
@@ -56,7 +57,7 @@ def init_db():
 #     result = c.fetchone()
 #     conn.close()
 #     return result
-    
+
 # def set_answer(user_id, answer):
 #     conn = sqlite3.connect(DBFILE)
 #     c = conn.cursor()
@@ -64,7 +65,7 @@ def init_db():
 #     c.execute("UPDATE bot_answers SET answer = ?, count = ?, date = ? WHERE user_id = ?;", (answer.answer.decode('utf-8'), answer.count, answer.date, user_id))
 #     conn.commit()
 #     conn.close()
-    
+
 # def get_answers():
 #     conn = sqlite3.connect(DBFILE)
 #     c = conn.cursor()

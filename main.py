@@ -24,18 +24,20 @@ token
 GENERATE:
 1) Init sequence with token from starts
 2) While token has ends:
-	- get ends for token
-	- select token from ends (according to probability)
-	- append token to sequence
+    - get ends for token
+    - select token from ends (according to probability)
+    - append token to sequence
 3) Return sequence
 
 """
 
 def generate_sequence():
-	pass
+    """TODO: wrtie"""
+    pass
 
 def main():
-	pass
+    """TODO: write usage"""
+    pass
 
 #Now call main function
 main()
