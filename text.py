@@ -9,7 +9,7 @@ import database as db
 # 3) Save to DB
 
 ENDINGS_RE = "[!.?\n]"
-N = 1 #TODO: use different sizes^ trigrams, digrams, single words etc
+N = 1 #used for different sizes - trigrams, digrams etc
 
 def read_text(path):
     """Read and parse text file"""
@@ -22,15 +22,26 @@ def read_text(path):
 
 def parse_tokens(text, size):
     """Parse sentece and return tokens"""
-    words = re.findall(r"\w+|[^\w\s]", text, re.UNICODE) #parse sentece into tokens
+    text = text.replace(r"\s+", " ") #replace multiple spaces
+    words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentece into tokens
+    # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
     if not words: #empty sentece
         return {}
-    for i in range(0, len(words), 2):
-        print(words[i])
+    length = len(words)
+    for i in range(0, length):
+        wordlist = []
+        for j in range(0, N):
+            if i + j < length: #we can append more words
+                wordlist.append(words[i + j])
+        print(wordlist)
+        # print(' '.join(wordlist))
     return {}
 
 def save_to_db(tokens):
     """Save tokens into database"""
+    sql = ''
+    for token in tokens:
+        pass
     pass
 
 

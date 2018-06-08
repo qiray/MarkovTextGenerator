@@ -11,10 +11,9 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS pairs (
             id INTEGER PRIMARY KEY
-            begin INTEGER,
+            begin TEXT,
             end TEXT,
-            probability REAL,
-            type INTEGER
+            count INTEGER
         );
         CREATE TABLE IF NOT EXISTS begins (
             token TEXT PRIMARY KEY
