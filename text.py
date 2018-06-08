@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from functools import reduce
 import database as db
 
 # PREPARE:
@@ -28,14 +29,15 @@ def parse_tokens(text, size):
     if not words: #empty sentece
         return {}
     length = len(words)
+    lists = []
     for i in range(0, length):
         wordlist = []
         for j in range(0, N):
             if i + j < length: #we can append more words
                 wordlist.append(words[i + j])
-        print(wordlist)
-        # print(' '.join(wordlist))
-    return {}
+        lists.append(wordlist)
+    print(lists)
+    return {} #TODO: generate tokens
 
 def save_to_db(tokens):
     """Save tokens into database"""
