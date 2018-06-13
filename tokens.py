@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-class Token(object):
+class Token(object): #TODO: add functions for generating begins and ends
 
-    def __init__(self, begin, end, is_begin=0, is_end=0):
+    def __init__(self, begin, end, is_begin=0, is_end=0): 
         self.begin = begin
         self.end = end
         self.is_begin = is_begin
         self.is_end = is_end
 
     def __str__(self):
-        return self.begin + ' ' + self.end + ' (%d %d)'% (self.is_begin, self.is_end)
+        return self.begin + ' ' + self.end + ' (%d %d)' % (self.is_begin, self.is_end)

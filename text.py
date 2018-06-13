@@ -54,10 +54,6 @@ def parse_tokens(text, size):
 
 def save_to_db(tokens):
     """Save tokens into database"""
-    sql = ''
-    for token in tokens:
-        pass
-    pass
-
+    db.save_tokens(tokens)
 
 read_text('test.txt')

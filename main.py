@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import database
+
 """
 
 PREPARE:
@@ -36,8 +38,8 @@ def generate_sequence():
     pass
 
 def main():
-    """TODO: write usage"""
-    pass
+    """Main function"""
+    database.init_db()
 
 #Now call main function
 main()
