@@ -8,12 +8,12 @@ def init_db():
     """init database"""
     conn = sqlite3.connect(DBFILE)
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.executescript("""
         CREATE TABLE IF NOT EXISTS pairs (
-            id INTEGER PRIMARY KEY
             begin TEXT,
             end TEXT,
-            count INTEGER
+            count INTEGER DEFAULT 0,
+            PRIMARY KEY (begin, end)
         );
         CREATE TABLE IF NOT EXISTS begins (
             token TEXT PRIMARY KEY
@@ -21,7 +21,24 @@ def init_db():
         CREATE TABLE IF NOT EXISTS ends (
             token TEXT PRIMARY KEY
         );
-        """)
+    """)
+    conn.commit()
+    conn.close()
+
+def save_tokens(tokens):
+    """Save tokens into database"""
+    #TODO: rewrite using single request
+    conn = sqlite3.connect(DBFILE)
+    cursor = conn.cursor()
+    for token in tokens:
+        cursor.execute('''
+            INSERT OR IGNORE INTO pairs(
+                begin,
+                end
+            ) VALUES(?, ?);
+        ''', (token.begin, token.end))
+        cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ?;', (token.begin, token.end))
+        # print (token)
     conn.commit()
     conn.close()
 
