@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import re
 from functools import reduce
 import database as db
@@ -18,9 +19,11 @@ def read_text(path):
     with open(path, 'r', encoding='utf-8') as f: #read file
         read_data = f.read()
         sentences = re.findall(r'[^!.?\n]*[.?!]+', read_data) #split line by sentences
+        conn, cursor = db.start_connection()
         for sentence in sentences:
             tokens = parse_tokens(sentence, N) #parse each sentence
-            save_to_db(tokens)
+            db.save_tokens(tokens, cursor)
+        db.end_connecion(conn, cursor)
 
 def parse_tokens(text, size):
     """Parse sentence and return tokens"""
@@ -52,8 +55,5 @@ def parse_tokens(text, size):
         result.append(token)
     return result
 
-def save_to_db(tokens):
-    """Save tokens into database"""
-    db.save_tokens(tokens)
-
-read_text('test.txt')
+#read text and parse it
+read_text(sys.argv[1] if len(sys.argv) > 1 else 'test.txt')
