@@ -25,11 +25,23 @@ def init_db():
     conn.commit()
     conn.close()
 
-def save_tokens(tokens):
-    """Save tokens into database"""
-    #TODO: rewrite using single request
+def start_connection():
+    """Open database and return connection with cursor to it"""
     conn = sqlite3.connect(DBFILE)
     cursor = conn.cursor()
+    return conn, cursor
+
+def end_connecion(conn, cursor):
+    """Commit and close connection to database"""
+    conn.commit()
+    conn.close()
+
+def save_tokens(tokens, cursor):
+    """Save tokens into opened database\n
+    start_connection() should be called before this function
+    end_connecion() should be called after saving all tokens
+    """
+    #https://stackoverflow.com/questions/1711631/improve-insert-per-second-performance-of-sqlite
     for token in tokens:
         cursor.execute('''
             INSERT OR IGNORE INTO pairs(
@@ -39,8 +51,6 @@ def save_tokens(tokens):
         ''', (token.begin, token.end))
         cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ?;', (token.begin, token.end))
         # print (token)
-    conn.commit()
-    conn.close()
 
 # def get_alldata():
 #     conn = sqlite3.connect(DBFILE)
