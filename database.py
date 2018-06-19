@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''database module'''
 
 import sqlite3
 
@@ -31,7 +32,7 @@ def start_connection():
     cursor = conn.cursor()
     return conn, cursor
 
-def end_connecion(conn, cursor):
+def end_connecion(conn):
     """Commit and close connection to database"""
     conn.commit()
     conn.close()
@@ -49,53 +50,26 @@ def save_tokens(tokens, cursor):
                 end
             ) VALUES(?, ?);
         ''', (token.begin, token.end))
-        cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ?;', (token.begin, token.end))
-        # print (token)
+        cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ?;',
+                       (token.begin, token.end))
+        if token.is_begin == 1:
+            cursor.execute('INSERT OR IGNORE INTO begins(token) VALUES(?)', (token.begin,))
+        if token.is_end == 1:
+            cursor.execute('INSERT OR IGNORE INTO ends(token) VALUES(?)', (token.end,))
 
-# def get_alldata():
-#     conn = sqlite3.connect(DBFILE)
-#     c = conn.cursor()
-#     c.execute('SELECT * FROM users;')
-#     result = c.fetchall()
-#     conn.close()
-#     return result
+def get_start_token():
+    """Return random start token from database"""
+    conn, cursor = start_connection()
+    cursor.execute('''SELECT * from pairs INNER JOIN begins ON pairs.begin = begins.token
+                   ORDER BY RANDOM() LIMIT 1;''')
+    result = cursor.fetchall()
+    end_connecion(conn)
+    return result
 
-# def get_userdata(user_id):
-#     conn = sqlite3.connect(DBFILE)
-#     c = conn.cursor()
-#     c.execute('SELECT * FROM users WHERE user_id=?;', (user_id,))
-#     result = c.fetchone()
-#     conn.close()
-#     return result
-
-# def set_userdata(user_id, userdata):
-#     conn = sqlite3.connect(DBFILE)
-#     c = conn.cursor()
-#     c.execute("INSERT OR IGNORE INTO users (user_id, username, request_step, request_string) VALUES(?, ?, ?, ?);", (user_id, userdata.username, userdata.request_step, userdata.request_string))
-#     c.execute("UPDATE users SET request_step = ?, username = ?, request_string = ? WHERE user_id = ?;", (userdata.request_step, userdata.username, userdata.request_string, user_id))
-#     conn.commit()
-#     conn.close()
-
-# def get_answer(user_id):
-#     conn = sqlite3.connect(DBFILE)
-#     c = conn.cursor()
-#     c.execute('SELECT * FROM bot_answers WHERE user_id=?;', (user_id,))
-#     result = c.fetchone()
-#     conn.close()
-#     return result
-
-# def set_answer(user_id, answer):
-#     conn = sqlite3.connect(DBFILE)
-#     c = conn.cursor()
-#     c.execute("INSERT OR IGNORE INTO bot_answers (user_id, answer, count, date) VALUES(?, ?, ?, ?);", (user_id, answer.answer.decode('utf-8'), answer.count, answer.date))
-#     c.execute("UPDATE bot_answers SET answer = ?, count = ?, date = ? WHERE user_id = ?;", (answer.answer.decode('utf-8'), answer.count, answer.date, user_id))
-#     conn.commit()
-#     conn.close()
-
-# def get_answers():
-#     conn = sqlite3.connect(DBFILE)
-#     c = conn.cursor()
-#     c.execute('SELECT * FROM bot_answers;')
-#     result = c.fetchall()
-#     conn.close()
-#     return result
+def get_pairs_for_start(start):
+    """Return all pairs from database for chosen start token"""
+    conn, cursor = start_connection()
+    cursor.execute('SELECT * from pairs WHERE begin = ?;', (start,))
+    result = cursor.fetchall()
+    end_connecion(conn)
+    return result
