@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import random
 import database
 
 """
@@ -33,13 +34,30 @@ GENERATE:
 
 """
 
+def get_random_pair(data, count):
+    index = random.randint(0, count - 1)
+    start_value, stop_value = 0, 0
+    for obj in data:
+        stop_value += obj[2]
+        if start_value <= index and index < stop_value:
+            return obj
+        start_value += obj[2]
+
 def generate_sequence():
-    """TODO: wrtie"""
-    pass
+    """Function for generating sentences"""
+    start = database.get_start_token()
+    if not start:
+        return ''
+    data, count = database.get_pairs_for_start(start)
+    tokens_list = []
+    get_random_pair(data, count)
+
 
 def main():
     """Main function"""
+    random.seed()
     database.init_db()
+    generate_sequence()
 
 #Now call main function
 main()

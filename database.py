@@ -62,14 +62,20 @@ def get_start_token():
     conn, cursor = start_connection()
     cursor.execute('''SELECT * from pairs INNER JOIN begins ON pairs.begin = begins.token
                    ORDER BY RANDOM() LIMIT 1;''')
-    result = cursor.fetchall()
+    result = cursor.fetchone()
     end_connecion(conn)
-    return result
+    return result[0] if len(result) > 0 else ''
 
 def get_pairs_for_start(start):
     """Return all pairs from database for chosen start token"""
     conn, cursor = start_connection()
     cursor.execute('SELECT * from pairs WHERE begin = ?;', (start,))
     result = cursor.fetchall()
+    cursor.execute('SELECT SUM(count) from pairs WHERE begin = ?;', (start,))
+    count = cursor.fetchone()
     end_connecion(conn)
-    return result
+    return result, count[0] if len(count) > 0 else 0
+
+def is_pair_end(pair):
+    '''TODO: write'''
+    pass
