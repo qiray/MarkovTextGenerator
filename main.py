@@ -27,8 +27,8 @@ def get_random_pair(data, count):
 def list_to_sentence(tokens_list):
     result = ' '.join(tokens_list)
     result = result.replace(text.STRING_START_TEXT, '')
-    result = re.sub(r'\s+', ' ', result ).strip() #remove multiple spaces
-    result = re.sub(r'\s([.,!?:)/])', r'\g<1>', result ).strip()
+    result = re.sub(r'\s+', ' ', result).strip() #remove multiple spaces
+    result = re.sub(r'\s([.,!?:)/])', r'\g<1>', result).strip()
     #TODO: check punctuation etc
     return result
 
@@ -71,7 +71,7 @@ def main():
         text.read_text(args.parse)
     if args.generate:
         sentence = generate_sequence()
-        print (sentence)
+        print(sentence)
     if args.version:
         print("Markov text generator v {}".format(get_version()))
 
