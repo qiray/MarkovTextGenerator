@@ -1,38 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import random
+import re
+import argparse
+
 import database
+import text
 
-"""
+VERSION_MAJOR = 0
+VERSION_MINOR = 0
+VERSION_BUILD = 1
 
-PREPARE:
-1) Read text
-2) Parse tokens
-3) Save to DB
-
-DB:
-
-pairs:
-start
-end
-probability
-type (maybe token is not a simple word/comma/dot/dash/etc or 2-3-4-word sequence)
-
-starts:
-token
-
-ends:
-token
-
-GENERATE:
-1) Init sequence with token from starts
-2) While token has ends:
-    - get ends for token
-    - select token from ends (according to probability)
-    - append token to sequence
-3) Return sequence
-
-"""
+def get_version():
+    return "{}.{}.{}".format(VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD)
 
 def get_random_pair(data, count):
     index = random.randint(0, count - 1)
@@ -42,22 +22,57 @@ def get_random_pair(data, count):
         if start_value <= index and index < stop_value:
             return obj
         start_value += obj[2]
+    return ['', '', 0]
+
+def list_to_sentence(tokens_list):
+    result = ' '.join(tokens_list)
+    result = result.replace(text.STRING_START_TEXT, '')
+    result = re.sub(r'\s+', ' ', result ).strip() #remove multiple spaces
+    result = re.sub(r'\s([.,!?:)/])', r'\g<1>', result ).strip()
+    return result
+
+def get_pair_for_start(start):
+    data, count = database.get_pairs_for_start(start)
+    return get_random_pair(data, count)
 
 def generate_sequence():
     """Function for generating sentences"""
     start = database.get_start_token()
     if not start:
         return ''
-    data, count = database.get_pairs_for_start(start)
-    tokens_list = []
-    get_random_pair(data, count)
+    pair = get_pair_for_start(start) #get all pairs for selected start
+    tokens_list = [pair[0], pair[1]]
+    while not database.is_pair_end(pair): #while chosen pair is not end
+        pair = get_pair_for_start(pair[1]) # get another list of pairs
+        tokens_list.append(pair[1])
+    return list_to_sentence(tokens_list)
 
+def parse_args():
+    """argparse settings"""
+    parser = argparse.ArgumentParser(prog='MarkovTextGenerator v {}'.format(get_version()), description='Markov text generator')
+    parser.add_argument('--init', action='store_true', help='Init database only')
+    parser.add_argument('-f', '--parse', help='Parse text file and save it in database')
+    parser.add_argument("-n", "--number", help='Set size of token for text parsing (default = 1)', type=int)
+    parser.add_argument("-g", "--generate", help='Generate text sequence', action='store_true')
+    parser.add_argument("-v", "--version", help='Show version', action='store_true')
+    return parser.parse_args()
 
 def main():
     """Main function"""
     random.seed()
-    database.init_db()
-    generate_sequence()
+
+    args = parse_args() #parse command line arguments
+    if args.init:
+        database.init_db()
+    if args.number:
+        text.set_n_value(args.number)
+    if args.parse:
+        text.read_text(args.parse)
+    if args.generate:
+        sentence = generate_sequence()
+        print (sentence)
+    if args.version:
+        print("Markov text generator v {}".format(get_version()))
 
 #Now call main function
 main()

@@ -55,7 +55,7 @@ def save_tokens(tokens, cursor):
         if token.is_begin == 1:
             cursor.execute('INSERT OR IGNORE INTO begins(token) VALUES(?)', (token.begin,))
         if token.is_end == 1:
-            cursor.execute('INSERT OR IGNORE INTO ends(token) VALUES(?)', (token.end,))
+            cursor.execute('INSERT OR IGNORE INTO ends(token) VALUES(?)', (token.end if token.end != '' else token.begin,))
 
 def get_start_token():
     """Return random start token from database"""
@@ -64,7 +64,7 @@ def get_start_token():
                    ORDER BY RANDOM() LIMIT 1;''')
     result = cursor.fetchone()
     end_connecion(conn)
-    return result[0] if len(result) > 0 else ''
+    return result[0] if result and len(result) > 0 else ''
 
 def get_pairs_for_start(start):
     """Return all pairs from database for chosen start token"""
@@ -74,8 +74,12 @@ def get_pairs_for_start(start):
     cursor.execute('SELECT SUM(count) from pairs WHERE begin = ?;', (start,))
     count = cursor.fetchone()
     end_connecion(conn)
-    return result, count[0] if len(count) > 0 else 0
+    return result, count[0] if count and len(count) > 0 else 0
 
 def is_pair_end(pair):
-    '''TODO: write'''
-    pass
+    '''Return true when pair is end'''
+    conn, cursor = start_connection()
+    cursor.execute('SELECT * from ends WHERE token = ?;', (pair[0],))
+    result = cursor.fetchone()
+    end_connecion(conn)
+    return False if not result else True
