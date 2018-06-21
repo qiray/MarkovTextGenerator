@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 '''This module is used for preparing database with text data'''
 
-import sys
 import re
-from nltk import sent_tokenize #for text parsing
+import nltk #for text parsing
 import database as db
 import tokens
 
@@ -25,7 +24,7 @@ def read_text(path):
     with open(path, 'r', encoding='utf-8') as f: #read file
         read_data = f.read()
         #sentences = re.findall(r'[^!.?\n]*[.?!\n]+(?=[ \n])', read_data) #split line by sentences
-        sentences = sent_tokenize(read_data) #use nltk to parse text into sentences
+        sentences = nltk.sent_tokenize(read_data) #use nltk to parse text into sentences
         conn, cursor = db.start_connection()
         for sentence in sentences:
             current_tokens = parse_tokens(sentence, N) #parse each sentence
@@ -34,12 +33,14 @@ def read_text(path):
 
 def parse_tokens(text, size):
     """Parse sentence and return tokens"""
-    text = re.sub(r'\s+', ' ', text ).strip() #remove multiple spaces
+    text = re.sub(r'\s+', ' ', text).strip() #remove multiple spaces
 
     string_start = STRING_START_TEXT * (size - 1)
     text = string_start + text #append to text some special start tokens
 
-    words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
+    # words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
+    # words = nltk.word_tokenize(text) #parse sentence into tokens
+    words = re.findall(r"[^и]", text, re.UNICODE)
     # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
     if not words: #empty sentence
         return []
