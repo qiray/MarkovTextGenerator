@@ -15,8 +15,13 @@ import tokens
 N = 1 #used for different sizes - trigrams, digrams etc
 STRING_START_TEXT = 'STRING_START_TOKEN '
 
+def set_n_value(number):
+    global N
+    N = number
+
 def read_text(path):
     """Read and parse text file"""
+    db.init_db() #init database to prevent bad situations
     with open(path, 'r', encoding='utf-8') as f: #read file
         read_data = f.read()
         #sentences = re.findall(r'[^!.?\n]*[.?!\n]+(?=[ \n])', read_data) #split line by sentences
@@ -29,7 +34,7 @@ def read_text(path):
 
 def parse_tokens(text, size):
     """Parse sentence and return tokens"""
-    text = text.replace(r"\s+", " ") #replace multiple spaces
+    text = re.sub(r'\s+', ' ', text ).strip() #remove multiple spaces
 
     string_start = STRING_START_TEXT * (size - 1)
     text = string_start + text #append to text some special start tokens
@@ -56,6 +61,3 @@ def parse_tokens(text, size):
         token = tokens.Token(start, end, is_begin, is_end)
         result.append(token)
     return result
-
-#read text and parse it
-read_text(sys.argv[1] if len(sys.argv) > 1 else 'test.txt')
