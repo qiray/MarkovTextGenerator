@@ -12,7 +12,7 @@ import tokens
 # 2) Parse tokens
 # 3) Save to DB
 
-N = 1 #used for different sizes - trigrams, digrams etc
+N = 3 #used for different sizes - trigrams, digrams etc
 STRING_START_TEXT = 'STRING_START_TOKEN '
 
 def set_n_value(number):

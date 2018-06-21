@@ -29,6 +29,7 @@ def list_to_sentence(tokens_list):
     result = result.replace(text.STRING_START_TEXT, '')
     result = re.sub(r'\s+', ' ', result ).strip() #remove multiple spaces
     result = re.sub(r'\s([.,!?:)/])', r'\g<1>', result ).strip()
+    #TODO: check punctuation etc
     return result
 
 def get_pair_for_start(start):
@@ -49,10 +50,10 @@ def generate_sequence():
 
 def parse_args():
     """argparse settings"""
-    parser = argparse.ArgumentParser(prog='MarkovTextGenerator v {}'.format(get_version()), description='Markov text generator')
+    parser = argparse.ArgumentParser(prog='MarkovTextGenerator', description='Markov text generator v {}'.format(get_version()))
     parser.add_argument('--init', action='store_true', help='Init database only')
     parser.add_argument('-f', '--parse', help='Parse text file and save it in database')
-    parser.add_argument("-n", "--number", help='Set size of token for text parsing (default = 1)', type=int)
+    parser.add_argument("-n", "--number", help='Set size of token for text parsing (default = {})'.format(text.N), type=int)
     parser.add_argument("-g", "--generate", help='Generate text sequence', action='store_true')
     parser.add_argument("-v", "--version", help='Show version', action='store_true')
     return parser.parse_args()
