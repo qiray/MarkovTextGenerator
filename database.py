@@ -76,10 +76,10 @@ def get_pairs_for_start(start):
     end_connecion(conn)
     return result, count[0] if count and len(count) > 0 else 0
 
-def is_pair_end(pair):
+def is_token_end(token):
     '''Return true when pair is end'''
     conn, cursor = start_connection()
-    cursor.execute('SELECT * from ends WHERE token = ?;', (pair[0],))
+    cursor.execute('SELECT * from ends WHERE token = ?;', (token,))
     result = cursor.fetchone()
     end_connecion(conn)
     return False if not result else True
