@@ -6,10 +6,17 @@ import nltk #for text parsing
 import database as db
 import tokens
 
+N = 2 #used for different sizes - trigrams, digrams etc
+STRING_START_TEXT = 'STRING_START_TOKEN '
+
 # PREPARE:
 # 1) Read text
 # 2) Parse tokens
 # 3) Save to DB
+
+def set_n_value(number):
+    global N
+    N = number
 
 def read_text(path):
     """Read and parse text file"""
@@ -20,26 +27,39 @@ def read_text(path):
         sentences = nltk.sent_tokenize(read_data) #use nltk to parse text into sentences
         conn, cursor = db.start_connection()
         for sentence in sentences:
-            current_tokens = parse_tokens(sentence) #parse each sentence
+            current_tokens = parse_tokens(sentence, N) #parse each sentence
             db.save_tokens(current_tokens, cursor)
         db.end_connecion(conn)
 
-def parse_tokens(text):
+def parse_tokens(text, size):
     """Parse sentence and return tokens"""
     text = re.sub(r'\s+', ' ', text).strip() #remove multiple spaces
 
+    string_start = STRING_START_TEXT * (size - 1)
+    text = string_start + text #append to text some special start tokens
+
     # words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
-    words = nltk.word_tokenize(text) #parse sentence into tokens
+    words = nltk.word_tokenize(text) #parse sentence into tokens #TODO: test on some real data
     # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
     if not words: #empty sentence
         return []
     length = len(words)
-    result = []
+    lists = []
+     #TODO: save pairs as (N*start words, 1 end word)
     for i in range(0, length):
-        is_begin = 1 if i == 0 else 0
-        is_end = 1 if i + 1 >= length - 1 else 0
-        start = words[i] if i < length else ''
-        end = words[i + 1] if i + 1 < length else ''
+        wordlist = []
+        for j in range(0, size):
+            if i + j < length: #we can append more words
+                wordlist.append(words[i + j])
+        lists.append(wordlist)
+    result = []
+    length = len(lists)
+    for i in range(0, length):
+        is_begin = 1 if i <= size - 1 else 0
+        is_end = 1 if i + size >= length - 1 else 0
+        start = ' '.join(lists[i]) if i < length else ''
+        end = ' '.join(lists[i + size]) if i + size < length else ''
         token = tokens.Token(start, end, is_begin, is_end)
+        print (token)
         result.append(token)
     return result
