@@ -9,4 +9,4 @@ class Token(object):
         self.is_end = is_end
 
     def __str__(self):
-        return self.begin + ' ' + self.end + ' (%d %d)' % (self.is_begin, self.is_end)
+        return self.begin + ' --- ' + self.end + ' (%d %d)' % (self.is_begin, self.is_end)

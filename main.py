@@ -47,6 +47,8 @@ def generate_sequence(number):
         return ''
     tokens_list = [start]
     pair = get_next_pair(tokens_list, number) #get all pairs for selected start
+    #TODO: generate previous sequence
+    #TODO: save N into database (?)
     tokens_list.append(pair[1])
     while not database.is_pair_end(pair): #while chosen pair is not end
         pair = get_next_pair(tokens_list, number) # get another list of pairs
