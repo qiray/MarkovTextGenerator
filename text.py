@@ -18,6 +18,14 @@ def set_n_value(number):
     global N
     N = number
 
+def split_into_words(text):
+    """Split text into words"""
+    # words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
+    #words = nltk.word_tokenize(text) #parse sentence into tokens #TODO: test on some real data
+    # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
+    words = text.split() #sometimes the simpliest method is the best one
+    return words
+
 def read_text(path):
     """Read and parse text file"""
     db.init_db() #init database to prevent bad situations
@@ -28,7 +36,7 @@ def read_text(path):
         conn, cursor = db.start_connection()
         for sentence in sentences:
             current_tokens = parse_tokens(sentence, N) #parse each sentence
-            db.save_tokens(current_tokens, cursor)
+            db.save_tokens(current_tokens, cursor, N)
         db.end_connecion(conn)
 
 def parse_tokens(text, size):
@@ -38,9 +46,7 @@ def parse_tokens(text, size):
     string_start = STRING_START_TEXT * (size - 1)
     text = string_start + text #append to text some special start tokens
 
-    # words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
-    words = nltk.word_tokenize(text) #parse sentence into tokens #TODO: test on some real data
-    # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
+    words = split_into_words(text)
     if not words: #empty sentence
         return []
     length = len(words)

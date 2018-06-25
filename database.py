@@ -3,6 +3,8 @@
 
 import sqlite3
 
+import text
+
 DBFILE = 'data.db'
 
 def init_db():
@@ -14,6 +16,7 @@ def init_db():
             begin TEXT,
             end TEXT,
             count INTEGER DEFAULT 0,
+            size INTEGER,
             PRIMARY KEY (begin, end)
         );
         CREATE TABLE IF NOT EXISTS begins (
@@ -37,7 +40,7 @@ def end_connecion(conn):
     conn.commit()
     conn.close()
 
-def save_tokens(tokens, cursor):
+def save_tokens(tokens, cursor, number):
     """Save tokens into opened database\n
     start_connection() should be called before this function
     end_connecion() should be called after saving all tokens
@@ -47,11 +50,12 @@ def save_tokens(tokens, cursor):
         cursor.execute('''
             INSERT OR IGNORE INTO pairs(
                 begin,
-                end
-            ) VALUES(?, ?);
-        ''', (token.begin, token.end))
-        cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ?;',
-                       (token.begin, token.end))
+                end,
+                size
+            ) VALUES(?, ?, ?);
+        ''', (token.begin, token.end, number))
+        cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ? AND size = ?;',
+                       (token.begin, token.end, number))
         if token.is_begin == 1:
             cursor.execute('INSERT OR IGNORE INTO begins(token) VALUES(?)', (token.begin,))
         if token.is_end == 1:
@@ -64,18 +68,22 @@ def get_start_token():
                    ORDER BY RANDOM() LIMIT 1;''')
     result = cursor.fetchone()
     end_connecion(conn)
-    return result[0] if result and len(result) > 0 else ''
+    return result[0] if result else ''
 
-def get_pairs_for_start(start):
+def get_pairs_for_list(tokens_list, number):
     """Return all pairs from database for chosen start token"""
+    start = tokens_list[-1]
     conn, cursor = start_connection()
     cursor.execute('SELECT * from pairs WHERE begin = ?;', (start,))
     result = cursor.fetchall()
+    if not result:
+        start = ' '.join(text.split_into_words(' '.join(tokens_list))[-number:])
+        cursor.execute('SELECT * from pairs WHERE begin = ?;', (start,))
+        result = cursor.fetchall()
     cursor.execute('SELECT SUM(count) from pairs WHERE begin = ?;', (start,))
     count = cursor.fetchone()
     end_connecion(conn)
-    print (start, result, count)
-    return result, count[0] if count and len(count) > 0 else 0
+    return result, count[0] if count else 0
 
 def is_pair_end(pair):
     '''Return true when pair is end'''
