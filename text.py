@@ -6,7 +6,7 @@ import nltk #for text parsing
 import database as db
 import tokens
 
-N = 2 #used for different sizes - trigrams, digrams etc
+N = 3 #used for different sizes - trigrams, digrams etc
 STRING_START_TEXT = 'STRING_START_TOKEN '
 
 # PREPARE:

@@ -40,7 +40,7 @@ def end_connecion(conn):
     conn.commit()
     conn.close()
 
-def save_tokens(tokens, cursor, number):
+def save_tokens(tokens, cursor, number=1):
     """Save tokens into opened database\n
     start_connection() should be called before this function
     end_connecion() should be called after saving all tokens
