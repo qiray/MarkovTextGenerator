@@ -45,7 +45,6 @@ def parse_tokens(text, size):
         return []
     length = len(words)
     lists = []
-     #TODO: save pairs as (N*start words, 1 end word)
     for i in range(0, length):
         wordlist = []
         for j in range(0, size):
@@ -58,8 +57,7 @@ def parse_tokens(text, size):
         is_begin = 1 if i <= size - 1 else 0
         is_end = 1 if i + size >= length - 1 else 0
         start = ' '.join(lists[i]) if i < length else ''
-        end = ' '.join(lists[i + size]) if i + size < length else ''
+        end = lists[i + size][0] if i + size < length else ''
         token = tokens.Token(start, end, is_begin, is_end)
-        print (token)
         result.append(token)
     return result
