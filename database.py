@@ -17,6 +17,7 @@ def init_db():
             end TEXT,
             count INTEGER DEFAULT 0,
             size INTEGER,
+            source text,
             PRIMARY KEY (begin, end)
         );
         CREATE TABLE IF NOT EXISTS begins (
@@ -51,9 +52,10 @@ def save_tokens(tokens, cursor, number=1):
             INSERT OR IGNORE INTO pairs(
                 begin,
                 end,
-                size
-            ) VALUES(?, ?, ?);
-        ''', (token.begin, token.end, number))
+                size,
+                source
+            ) VALUES(?, ?, ?, ?);
+        ''', (token.begin, token.end, number, token.source))
         cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ? AND size = ?;',
                        (token.begin, token.end, number))
         if token.is_begin == 1:
