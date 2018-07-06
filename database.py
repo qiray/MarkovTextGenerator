@@ -85,6 +85,8 @@ def get_pairs_for_list(tokens_list, number):
     cursor.execute('SELECT SUM(count) from pairs WHERE begin = ?;', (start,))
     count = cursor.fetchone()
     end_connecion(conn)
+    if not result:
+        return [], 0
     return result, count[0] if count else 0
 
 def is_pair_end(pair):

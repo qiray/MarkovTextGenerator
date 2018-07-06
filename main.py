@@ -31,12 +31,15 @@ def list_to_sentence(tokens_list):
     result = ' '.join(tokens_list)
     result = result.replace(text.STRING_START_TEXT, '')
     result = re.sub(r'\s+', ' ', result).strip() #remove multiple spaces
-    result = re.sub(r'\s([.,!?:)/])', r'\g<1>', result).strip()
+    result = re.sub(r'\s([.,;!?:)/])', r'\g<1>', result).strip()
+    result = re.sub(r'`|"', '', result).strip()
     #TODO: check punctuation etc
     return result
 
 def get_next_pair(tokens_list, number):
     data, count = database.get_pairs_for_list(tokens_list, number)
+    if count <= 0:
+        return None
     return get_random_pair(data, count)
 
 def generate_sequence(number):
@@ -49,6 +52,8 @@ def generate_sequence(number):
     tokens_list.append(pair[1])
     while not database.is_pair_end(pair): #while chosen pair is not end
         pair = get_next_pair(tokens_list, number) # get another list of pairs
+        if not pair:
+            break
         tokens_list.append(pair[1])
     return list_to_sentence(tokens_list)
 
