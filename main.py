@@ -72,6 +72,7 @@ def parse_args():
     parser.add_argument("-n", "--number", help='Set size of token for text parsing (default = {})'.format(text.N), type=int)
     parser.add_argument("-g", "--generate", help='Generate text sequence', action='store_true')
     parser.add_argument("-v", "--version", help='Show version', action='store_true')
+    parser.add_argument("-t", "--tweet", help='Post in twitter (you need file secrets.py with Twitter application config)', action='store_true')
     return parser.parse_args()
 
 def main():
@@ -89,7 +90,8 @@ def main():
         if args.generate:
             sentence = generate_sequence(text.N)
             print(sentence)
-            twitter.tweet(sentence)
+            if args.tweet:
+                twitter.tweet(sentence)
         if args.version:
             print("Markov text generator v {}".format(get_version()))
     except FileNotFoundError:
