@@ -21,7 +21,7 @@ def set_n_value(number):
 def split_into_words(text):
     """Split text into words"""
     # words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
-    words = nltk.word_tokenize(text) #parse sentence into tokens #TODO: test on some real data
+    words = nltk.word_tokenize(text) #parse sentence into tokens
     # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
     # words = text.split() #sometimes the simpliest method is the best one
     return words

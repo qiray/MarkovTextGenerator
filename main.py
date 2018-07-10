@@ -9,7 +9,7 @@ import text
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
-VERSION_BUILD = 1
+VERSION_BUILD = 2
 
 def get_version():
     '''Get app version'''
@@ -32,8 +32,10 @@ def list_to_sentence(tokens_list):
     result = result.replace(text.STRING_START_TEXT, '')
     result = re.sub(r'\s+', ' ', result).strip() #remove multiple spaces
     result = re.sub(r'\s([.,;!?:)/])', r'\g<1>', result).strip()
-    result = re.sub(r'`|"', '', result).strip()
-    #TODO: check punctuation etc
+    result = re.sub(r'« ', r'«', result).strip()
+    result = re.sub(r' »', r'»', result).strip()
+    result = re.sub(r'\( ', r'(', result).strip()
+    result = re.sub(r'`|"|\[|\]', '', result).strip()
     return result
 
 def get_next_pair(tokens_list, number):
@@ -49,12 +51,16 @@ def generate_sequence(number):
         return ''
     tokens_list = [start]
     pair = get_next_pair(tokens_list, number) #get all pairs for selected start
+    sources = [pair[4]]
     tokens_list.append(pair[1])
     while not database.is_pair_end(pair): #while chosen pair is not end
         pair = get_next_pair(tokens_list, number) # get another list of pairs
         if not pair:
             break
+        sources.append(pair[4]) #save pairs' sources int the list
         tokens_list.append(pair[1])
+    if(len(set(sources)) == 1): #if we used only 1 source
+        return generate_sequence(number) #try to generate another one
     return list_to_sentence(tokens_list)
 
 def parse_args():
