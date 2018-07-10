@@ -6,10 +6,11 @@ import argparse
 
 import database
 import text
+import twitter
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
-VERSION_BUILD = 2
+VERSION_BUILD = 3
 
 def get_version():
     '''Get app version'''
@@ -88,6 +89,7 @@ def main():
         if args.generate:
             sentence = generate_sequence(text.N)
             print(sentence)
+            twitter.tweet(sentence)
         if args.version:
             print("Markov text generator v {}".format(get_version()))
     except FileNotFoundError:
