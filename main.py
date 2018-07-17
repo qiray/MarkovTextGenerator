@@ -10,7 +10,7 @@ import twitter
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
-VERSION_BUILD = 4
+VERSION_BUILD = 5
 
 def get_version():
     '''Get app version'''

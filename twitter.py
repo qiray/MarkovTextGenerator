@@ -11,4 +11,6 @@ def tweet(text):
     cfg = secrets.cfg
     api = get_api(cfg)
     status = api.update_status(status=text)
+    if status.id:
+        status = api.create_favorite(status.id)
     print(status)

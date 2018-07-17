@@ -50,8 +50,7 @@ python3 main.py [OPTIONS]
                     Set size of token for text parsing (default = 3)
 -g, --generate        Generate text sequence
 -v, --version         Show version
--t, --tweet
-                    (you need file secrets.py with Twitter application config)
+-t, --tweet           Tweet generated sentence
 ```
 
 For example, to parse text file file.txt and add it's content to database:
@@ -65,6 +64,16 @@ python3 main.py -g
 To genereate a sentence and post it to Twitter:
 ``` bash
 python3 main.py -g -t
+```
+For tweets you need file secrets.py with similar config (of course with real data):
+
+``` python
+cfg = { 
+    "consumer_key"        : "consumer_key",
+    "consumer_secret"     : "consumer_secret",
+    "access_token"        : "access_token",
+    "access_token_secret" : "access_token_secret" 
+}
 ```
 
 ### License
