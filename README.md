@@ -51,6 +51,7 @@ python3 main.py [OPTIONS]
 -g, --generate        Generate text sequence
 -v, --version         Show version
 -t, --tweet           Tweet generated sentence
+--favorite            Add to favorites posted tweet
 ```
 
 For example, to parse text file file.txt and add it's content to database:
@@ -65,14 +66,14 @@ To genereate a sentence and post it to Twitter:
 ``` bash
 python3 main.py -g -t
 ```
-For tweets you need file secrets.py with similar config (of course with real data):
+For tweets you need to edit file secrets.py adding config with real data:
 
 ``` python
 cfg = { 
     "consumer_key"        : "consumer_key",
     "consumer_secret"     : "consumer_secret",
     "access_token"        : "access_token",
-    "access_token_secret" : "access_token_secret" 
+    "access_token_secret" : "access_token_secret"
 }
 ```
 
