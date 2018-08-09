@@ -10,7 +10,7 @@ import twitter
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
-VERSION_BUILD = 0
+VERSION_BUILD = 1
 
 def get_version():
     '''Get app version'''
@@ -45,7 +45,7 @@ def get_next_pair(tokens_list, number):
         return None
     return get_random_pair(data, count)
 
-def generate_sequence(number, tweet):
+def generate_sequence(number, differentsource, tweet):
     """Function for generating sentences"""
     start = database.get_start_token()
     if not start:
@@ -60,12 +60,11 @@ def generate_sequence(number, tweet):
             break
         sources.append(pair[4]) #save pairs' sources int the list
         tokens_list.append(pair[1])
-    if len(set(sources)) == 1: #if we used only 1 source
-        return generate_sequence(number, tweet) #try to generate another one
+    if differentsource and len(set(sources)) == 1: #if we used only 1 source
+        return generate_sequence(number, differentsource, tweet) #try to generate another one
     result = list_to_sentence(tokens_list)
-    print (len(result))
     if tweet and len(result) > 280: #if tweet is too long
-        return generate_sequence(number, tweet) #try to generate another one
+        return generate_sequence(number, differentsource, tweet) #try to generate another one
     return result
 
 def parse_args():
@@ -78,6 +77,7 @@ def parse_args():
     parser.add_argument("-v", "--version", help='Show version', action='store_true')
     parser.add_argument("-t", "--tweet", help='Post in twitter (you need file secrets.py with Twitter application config)', action='store_true')
     parser.add_argument("--favorite", help='Add to favorites posted tweet', action='store_true')
+    parser.add_argument("--differentsource", help='Use different sources only', action='store_true')
     return parser.parse_args()
 
 def main():
@@ -93,7 +93,7 @@ def main():
         if args.parse:
             text.read_text(args.parse)
         if args.generate:
-            sentence = generate_sequence(text.N, args.tweet)
+            sentence = generate_sequence(text.N, args.differentsource, args.tweet)
             print(sentence)
             if args.tweet:
                 twitter.tweet(sentence, args.favorite)

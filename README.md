@@ -52,6 +52,7 @@ python3 main.py [OPTIONS]
 -v, --version         Show version
 -t, --tweet           Tweet generated sentence
 --favorite            Add to favorites posted tweet
+--differentsource     Use different sources only
 ```
 
 For example, to parse text file file.txt and add it's content to database:
