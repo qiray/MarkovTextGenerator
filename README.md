@@ -45,14 +45,15 @@ python3 main.py [OPTIONS]
 -h, --help            show this help message and exit
 --init                Init database only
 -f PARSE, --parse PARSE
-                    Parse text file and save it in database
+                      Parse text file and save it in database
 -n NUMBER, --number NUMBER
-                    Set size of token for text parsing (default = 3)
+                      Set size of token for text parsing (default = 3)
 -g, --generate        Generate text sequence
 -v, --version         Show version
 -t, --tweet           Tweet generated sentence
 --favorite            Add to favorites posted tweet
---differentsource     Use different sources only
+--differentsource     Enable this option to generate texts from different
+                      sources only
 ```
 
 For example, to parse text file file.txt and add it's content to database:

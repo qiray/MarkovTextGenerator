@@ -77,7 +77,7 @@ def parse_args():
     parser.add_argument("-v", "--version", help='Show version', action='store_true')
     parser.add_argument("-t", "--tweet", help='Post in twitter (you need file secrets.py with Twitter application config)', action='store_true')
     parser.add_argument("--favorite", help='Add to favorites posted tweet', action='store_true')
-    parser.add_argument("--differentsource", help='Use different sources only', action='store_true')
+    parser.add_argument("--differentsource", help='Enable this option to generate texts from different sources only', action='store_true')
     return parser.parse_args()
 
 def main():
