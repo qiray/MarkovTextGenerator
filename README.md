@@ -17,7 +17,7 @@ This program uses Python 3 and some extra libraries:
 You should install requirements to use this program: python3, pip3. and additional python libraries. On *NIX systems you can simply run this code:
 
 ``` bash
-bash dependecies.sh
+bash dependencies.sh
 ```
 
 Or you can manually install dependencies.
