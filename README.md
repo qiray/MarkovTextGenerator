@@ -80,4 +80,4 @@ cfg = {
 ```
 
 ### License
-This plugin uses GNU GPL3. For more information see the LICENSE file.
+This program uses GNU GPL3. For more information see the LICENSE file.
