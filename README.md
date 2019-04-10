@@ -14,27 +14,12 @@ This program uses Python 3 and some extra libraries:
 
 ## Installation
 
-You should install requirements to use this program: python3, pip3. and additional python libraries. On *NIX systems you can simply run this code:
+You should install requirements to use this program: python3, pip3 and some additional python libraries. There is requirements.txt file with libraries' list.
+
+Before using this program you should install some nltk data. It's pretty simple - just run:
 
 ``` bash
-bash dependencies.sh
-```
-
-Or you can manually install dependencies.
-
-In bash:
-
-``` bash
-pip3 install nltk
-pip3 install argparse
-pip3 install tweepy
-```
-
-And in python:
-
-``` python
-import nltk
-nltk.download('punkt')
+python3 prepare.py
 ```
 
 ## Usage
