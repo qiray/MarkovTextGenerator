@@ -8,9 +8,7 @@ This program uses Python 3 and some extra libraries:
 
 - argparse to parse command line arguments;
 
-- NLTK to parse text files and sentences;
-
-- tweepy to post tweets.
+- NLTK to parse text files and sentences.
 
 ## Installation
 
@@ -35,8 +33,6 @@ python3 main.py [OPTIONS]
                       Set size of token for text parsing (default = 3)
 -g, --generate        Generate text sequence
 -v, --version         Show version
--t, --tweet           Tweet generated sentence
---favorite            Add to favorites posted tweet
 --differentsource     Enable this option to generate texts from different
                       sources only
 ```
@@ -49,19 +45,6 @@ To generate a sentence using existing database run:
 ``` bash
 python3 main.py -g
 ```
-To genereate a sentence and post it to Twitter:
-``` bash
-python3 main.py -g -t
-```
-For tweets you need to edit file secrets.py adding config with real data:
-
-``` python
-cfg = { 
-    "consumer_key"        : "consumer_key",
-    "consumer_secret"     : "consumer_secret",
-    "access_token"        : "access_token",
-    "access_token_secret" : "access_token_secret"
-}
 ```
 
 ### License
