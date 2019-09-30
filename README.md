@@ -14,12 +14,6 @@ This program uses Python 3 and some extra libraries:
 
 You should install requirements to use this program: python3, pip3 and some additional python libraries. There is requirements.txt file with libraries' list.
 
-Before using this program you should install some nltk data. It's pretty simple - just run:
-
-``` bash
-python3 prepare.py
-```
-
 ## Usage
 
 ```

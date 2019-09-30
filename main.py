@@ -21,13 +21,20 @@
 import random
 import re
 import argparse
+import nltk
+
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    print("Downloading NLTK data. Please wait.")
+    nltk.download('punkt')
 
 import database
 import text
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
-VERSION_BUILD = 2
+VERSION_BUILD = 3
 
 def get_version():
     '''Get app version'''
