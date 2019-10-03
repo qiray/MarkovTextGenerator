@@ -8,7 +8,9 @@ This program uses Python 3 and some extra libraries:
 
 - argparse to parse command line arguments;
 
-- NLTK to parse text files and sentences.
+- NLTK to parse text files and sentences;
+
+- pyinstaller for optional build project as binary release.
 
 ## Installation
 

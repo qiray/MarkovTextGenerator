@@ -36,6 +36,8 @@ VERSION_MAJOR = 0
 VERSION_MINOR = 1
 VERSION_BUILD = 3
 
+#TODO: https://github.com/pyinstaller/pyinstaller-hooks update version, readme and make release.
+
 def get_version():
     '''Get app version'''
     return "{}.{}.{}".format(VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD)

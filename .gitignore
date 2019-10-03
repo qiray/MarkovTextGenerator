@@ -3,5 +3,8 @@
 *.db-journal
 *.txt
 *.p
+*.spec
 .vscode
 secrets.py
+build
+dist
