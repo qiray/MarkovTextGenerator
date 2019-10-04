@@ -36,7 +36,7 @@ VERSION_MAJOR = 0
 VERSION_MINOR = 1
 VERSION_BUILD = 3
 
-#TODO: https://github.com/pyinstaller/pyinstaller-hooks update version, readme and make release.
+#TODO: https://github.com/pyinstaller/pyinstaller-hooks and https://pyinstaller.readthedocs.io/en/stable/hooks.html + update version, readme and make release. Improve dabase (make it smaller and/or faster).
 
 def get_version():
     '''Get app version'''
@@ -47,10 +47,10 @@ def get_random_pair(data, count):
     index = random.randint(0, count - 1)
     start_value, stop_value = 0, 0
     for obj in data:
-        stop_value += obj[2]
+        stop_value += obj[4]
         if start_value <= index and index < stop_value:
             return obj
-        start_value += obj[2]
+        start_value += obj[4]
     return ['', '', 0]
 
 def list_to_sentence(tokens_list):

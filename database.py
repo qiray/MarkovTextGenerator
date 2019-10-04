@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2018, Yaroslav Zotov, https://github.com/qiray/
+# Copyright (c) 2018-2019, Yaroslav Zotov, https://github.com/qiray/
 # All rights reserved.
 
 # This file is part of MarkovTextGenerator.
@@ -34,16 +34,16 @@ def init_db():
         CREATE TABLE IF NOT EXISTS pairs (
             begin TEXT,
             end TEXT,
+            is_begin INTEGER,
+            is_end INTEGER,
             count INTEGER DEFAULT 0,
             size INTEGER,
-            source text,
+            source INTEGER,
             PRIMARY KEY (begin, end)
         );
-        CREATE TABLE IF NOT EXISTS begins (
-            token TEXT PRIMARY KEY
-        );
-        CREATE TABLE IF NOT EXISTS ends (
-            token TEXT PRIMARY KEY
+        CREATE TABLE IF NOT EXISTS sources (
+            id INTEGER AUTO INCREMENT PRIMARY KEY,
+            name text
         );
     """)
     conn.commit()
@@ -60,6 +60,14 @@ def end_connecion(conn):
     conn.commit()
     conn.close()
 
+def save_source(source_name):
+    conn, cursor = start_connection()
+    cursor.execute('INSERT OR IGNORE INTO sources (name) VALUES(?);', (source_name,))
+    cursor.execute('SELECT last_insert_rowid() FROM sources;')
+    result = cursor.fetchone()
+    end_connecion(conn)
+    return result[0] if result else 1
+
 def save_tokens(tokens, cursor, number=1):
     """Save tokens into opened database\n
     start_connection() should be called before this function
@@ -71,22 +79,19 @@ def save_tokens(tokens, cursor, number=1):
             INSERT OR IGNORE INTO pairs(
                 begin,
                 end,
+                is_begin,
+                is_end,
                 size,
                 source
-            ) VALUES(?, ?, ?, ?);
-        ''', (token.begin, token.end, number, token.source))
+            ) VALUES(?, ?, ?, ?, ?, ?);
+        ''', (token.begin, token.end, token.is_begin, token.is_end, number, token.source))
         cursor.execute('UPDATE pairs SET count = count + 1 WHERE begin = ? AND end = ? AND size = ?;',
                        (token.begin, token.end, number))
-        if token.is_begin == 1:
-            cursor.execute('INSERT OR IGNORE INTO begins(token) VALUES(?)', (token.begin,))
-        if token.is_end == 1:
-            cursor.execute('INSERT OR IGNORE INTO ends(token) VALUES(?)', (token.end if token.end != '' else token.begin,))
 
 def get_start_token():
     """Return random start token from database"""
     conn, cursor = start_connection()
-    cursor.execute('''SELECT * from pairs INNER JOIN begins ON pairs.begin = begins.token
-                   ORDER BY RANDOM() LIMIT 1;''')
+    cursor.execute('SELECT * from pairs WHERE is_begin = 1 ORDER BY RANDOM() LIMIT 1;')
     result = cursor.fetchone()
     end_connecion(conn)
     return result[0] if result else ''
@@ -111,7 +116,7 @@ def get_pairs_for_list(tokens_list, number):
 def is_pair_end(pair):
     '''Return true when pair is end'''
     conn, cursor = start_connection()
-    cursor.execute('SELECT * from ends WHERE token = ? OR token = ?;', (pair[0],pair[1]))
+    cursor.execute('SELECT * from pairs WHERE is_end = 1 AND (end = ? OR end = ?);', (pair[0], pair[1],))
     result = cursor.fetchone()
     end_connecion(conn)
     return False if not result else True

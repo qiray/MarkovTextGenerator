@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2018, Yaroslav Zotov, https://github.com/qiray/
+# Copyright (c) 2018-2019, Yaroslav Zotov, https://github.com/qiray/
 # All rights reserved.
 
 # This file is part of MarkovTextGenerator.
@@ -20,7 +20,7 @@
 
 class Token(object):
 
-    def __init__(self, begin, end, source='', is_begin=0, is_end=0):
+    def __init__(self, begin, end, source=1, is_begin=0, is_end=0):
         self.begin = begin
         self.end = end
         self.is_begin = is_begin

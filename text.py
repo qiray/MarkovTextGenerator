@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2018, Yaroslav Zotov, https://github.com/qiray/
+# Copyright (c) 2018-2019, Yaroslav Zotov, https://github.com/qiray/
 # All rights reserved.
 
 # This file is part of MarkovTextGenerator.
@@ -52,13 +52,14 @@ def read_text(path):
         read_data = f.read()
         #sentences = re.findall(r'[^!.?\n]*[.?!\n]+(?=[ \n])', read_data) #split line by sentences
         sentences = nltk.sent_tokenize(read_data) #use nltk to parse text into sentences
+        source_id = db.save_source(path)
         conn, cursor = db.start_connection()
         for sentence in sentences:
-            current_tokens = parse_tokens(sentence, N, path) #parse each sentence
+            current_tokens = parse_tokens(sentence, N, source_id) #parse each sentence
             db.save_tokens(current_tokens, cursor, N)
         db.end_connecion(conn)
 
-def parse_tokens(text, size, filename):
+def parse_tokens(text, size, source_id):
     """Parse sentence and return tokens"""
     text = re.sub(r'\s+', ' ', text).strip() #remove multiple spaces
 
@@ -83,6 +84,6 @@ def parse_tokens(text, size, filename):
         is_end = 1 if i + size >= length - 1 else 0
         start = ' '.join(lists[i]) if i < length else ''
         end = lists[i + size][0] if i + size < length else ''
-        token = tokens.Token(start, end, filename, is_begin, is_end)
+        token = tokens.Token(start, end, source_id, is_begin, is_end)
         result.append(token)
     return result
