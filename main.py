@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with MarkovTextGenerator.  If not, see <https://www.gnu.org/licenses/>.
 
+import sys
 import random
 import re
 import argparse
@@ -34,7 +35,7 @@ import text
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
-VERSION_BUILD = 3
+VERSION_BUILD = 4
 
 #TODO: https://github.com/pyinstaller/pyinstaller-hooks and https://pyinstaller.readthedocs.io/en/stable/hooks.html + update version, readme and make release. Improve dabase (make it smaller and/or faster).
 
@@ -100,14 +101,14 @@ def parse_args():
     parser.add_argument("-g", "--generate", help='Generate text sequence', action='store_true')
     parser.add_argument("-v", "--version", help='Show version', action='store_true')
     parser.add_argument("--differentsource", help='Enable this option to generate texts from different sources only', action='store_true')
-    return parser.parse_args()
+    return parser, parser.parse_args()
 
 def main():
     """Main function"""
     random.seed()
 
     try:
-        args = parse_args() #parse command line arguments
+        parser, args = parse_args() #parse command line arguments
         if args.init:
             database.init_db()
         if args.number:
@@ -119,6 +120,8 @@ def main():
             print(sentence)
         if args.version:
             print("Markov text generator v {}".format(get_version()))
+        if len(sys.argv) < 2:
+            parser.print_help()
     except FileNotFoundError:
         print("Can't read data file {}".format(args.parse))
 
