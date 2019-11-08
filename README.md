@@ -22,8 +22,7 @@ You should install requirements to use this program: python3, pip3 and some addi
 python3 main.py [OPTIONS]
 
 -h, --help            show this help message and exit
---init                Init database only
--f PARSE, --parse PARSE
+-f FILE, --parse FILE
                       Parse text file and save it in database
 -n NUMBER, --number NUMBER
                       Set size of token for text parsing (default = 3)

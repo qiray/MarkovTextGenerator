@@ -39,10 +39,7 @@ def set_n_value(number):
 
 def split_into_words(text):
     """Split text into words"""
-    # words = re.findall(r"[\w-]+|[^\w\s]", text, re.UNICODE) #parse sentence into tokens
     words = nltk.word_tokenize(text) #parse sentence into tokens
-    # words = re.findall(r"\w+\s*|[^\w\s]\s*", text, re.UNICODE) #with spaces
-    # words = text.split() #sometimes the simpliest method is the best one
     return words
 
 def read_text(path):
@@ -50,7 +47,6 @@ def read_text(path):
     db.init_db() #init database to prevent bad situations
     with open(path, 'r', encoding='utf-8') as f: #read file
         read_data = f.read()
-        #sentences = re.findall(r'[^!.?\n]*[.?!\n]+(?=[ \n])', read_data) #split line by sentences
         sentences = nltk.sent_tokenize(read_data) #use nltk to parse text into sentences
         source_id = db.save_source(path)
         conn, cursor = db.start_connection()

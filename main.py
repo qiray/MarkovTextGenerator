@@ -35,7 +35,7 @@ import text
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 1
-VERSION_BUILD = 4
+VERSION_BUILD = 5
 
 #TODO: https://github.com/pyinstaller/pyinstaller-hooks and https://pyinstaller.readthedocs.io/en/stable/hooks.html + update version, readme and make release. Improve dabase (make it smaller and/or faster).
 
@@ -95,8 +95,7 @@ def generate_sequence(number, differentsource):
 def parse_args():
     """argparse settings"""
     parser = argparse.ArgumentParser(prog='MarkovTextGenerator', description='Markov text generator v {}'.format(get_version()))
-    parser.add_argument('--init', action='store_true', help='Init database only')
-    parser.add_argument('-f', '--parse', help='Parse text file and save it in database')
+    parser.add_argument('-f', '--parse', help='Parse text file and save it in database', metavar='FILE')
     parser.add_argument("-n", "--number", help='Set size of token for text parsing (default = {})'.format(text.N), type=int)
     parser.add_argument("-g", "--generate", help='Generate text sequence', action='store_true')
     parser.add_argument("-v", "--version", help='Show version', action='store_true')
@@ -109,8 +108,6 @@ def main():
 
     try:
         parser, args = parse_args() #parse command line arguments
-        if args.init:
-            database.init_db()
         if args.number:
             text.set_n_value(args.number)
         if args.parse:
